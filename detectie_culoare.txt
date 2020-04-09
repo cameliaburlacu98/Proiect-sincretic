@@ -1,0 +1,19 @@
+import cv2
+import numpy as np 
+from cv_bridge import CvBridge 
+
+image=cv2.imread('balls.jpg')
+cv2.imshow("image",image)
+hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+colorLow = np.array([22,60,200])
+colorHigh = np.array([60,255,255])
+#colorLow = np.array([36,202,59])
+#colorHigh = np.array([71,255,255])
+kernalOpen=np.ones((7,7))
+kernalClose=np.ones((15,15))
+mask = cv2.inRange(hsv, colorLow, colorHigh)
+mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE,kernalClose)
+mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernalOpen)
+result = cv2.bitwise_and(image, image, mask = mask)
+cv2.imshow('colorTest', result)
+cv2.waitKey(0)
